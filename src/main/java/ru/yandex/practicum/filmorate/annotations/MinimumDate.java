@@ -1,13 +1,11 @@
 package ru.yandex.practicum.filmorate.annotations;
 
 import jakarta.validation.Constraint;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.constraints.Past;
+import ru.yandex.practicum.filmorate.validators.MinimumDateValidator;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.time.LocalDate;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = MinimumDateValidator.class)
@@ -22,18 +20,5 @@ public @interface MinimumDate {
     String value();
 }
 
-class MinimumDateValidator implements ConstraintValidator<MinimumDate, LocalDate> {
-    private LocalDate minimumDate;
-
-    @Override
-    public void initialize(MinimumDate constraintAnnotation) {
-        minimumDate = LocalDate.parse(constraintAnnotation.value());
-    }
-
-    @Override
-    public boolean isValid(LocalDate value, ConstraintValidatorContext context) {
-        return value == null || !value.isBefore(minimumDate);
-    }
-}
 
 
