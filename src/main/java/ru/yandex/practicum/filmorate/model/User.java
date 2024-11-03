@@ -12,7 +12,7 @@ import lombok.NonNull;
 import java.time.LocalDate;
 
 @Data
-@EqualsAndHashCode(of ={"email"})
+@EqualsAndHashCode(of = {"email"})
 @NoArgsConstructor
 public class User {
 
