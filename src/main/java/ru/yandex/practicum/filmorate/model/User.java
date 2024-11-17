@@ -1,15 +1,14 @@
 package ru.yandex.practicum.filmorate.model;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(of = {"email"})
@@ -18,18 +17,19 @@ public class User {
 
 
   private Long id;
-  @NonNull
+  @NotNull
   @NotBlank
   @Email
   private String email;
-  @NonNull
+  @NotNull
   @NotBlank
   @Pattern(regexp = "^\\S*$")
   private String login;
   private String name;
-  @NonNull
+  @NotNull
   @Past
   private LocalDate birthday;
+  private Set<Long> friends = new HashSet<>();
 
 
 }
