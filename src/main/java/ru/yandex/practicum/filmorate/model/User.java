@@ -15,13 +15,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class User {
 
-
   private Long id;
-  @NotNull
   @NotBlank
   @Email
   private String email;
-  @NotNull
   @NotBlank
   @Pattern(regexp = "^\\S*$")
   private String login;
