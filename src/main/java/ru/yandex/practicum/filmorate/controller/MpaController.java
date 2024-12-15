@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.yandex.practicum.filmorate.dto.GenreDto;
 import ru.yandex.practicum.filmorate.dto.MpaDto;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.storage.MpaStorage;
@@ -30,7 +29,7 @@ public class MpaController {
 
     @GetMapping("/{id}")
     public MpaDto getMpaById(@PathVariable long id) {
-        log.info("Запрос рейтинга с id {}",id);
+        log.info("Запрос рейтинга с id {}", id);
         Optional<MpaDto> mpaDto = mpaStorage.getMpaById(id);
         if (mpaDto.isPresent()) {
             return mpaDto.get();

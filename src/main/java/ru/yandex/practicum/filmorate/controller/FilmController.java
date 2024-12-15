@@ -5,11 +5,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dto.FilmDto;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
@@ -36,11 +33,11 @@ public class FilmController {
     public FilmDto postFilm(@Valid @RequestBody FilmDto film) {
         log.info("Добавление нового фильма");
 
-       return filmService.postFilm(film);
+        return filmService.postFilm(film);
     }
 
     @PutMapping
-    public FilmDto putFilm(@Valid @RequestBody Film film) {
+    public FilmDto putFilm(@Valid @RequestBody FilmDto film) {
         log.info("Замена фильма");
         if (film.getId() == null) {
             log.error("Не указан id");

@@ -1,5 +1,3 @@
-
-
 MERGE INTO GENRE KEY(id) VALUES(1,'Комедия');
 MERGE INTO GENRE KEY(id) VALUES(2,'Драма');
 MERGE INTO GENRE KEY(id) VALUES(3,'Мультфильм');

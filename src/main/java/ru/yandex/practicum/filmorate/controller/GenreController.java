@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class GenreController {
 
-   private final GenreStorage genreStorage;
+    private final GenreStorage genreStorage;
 
     @GetMapping
     public Collection<GenreDto> getGenre() {
@@ -29,12 +29,12 @@ public class GenreController {
 
     @GetMapping("/{id}")
     public GenreDto getGenreById(@PathVariable long id) {
-        log.info("Запрос жанра с id {}",id);
+        log.info("Запрос жанра с id {}", id);
         Optional<GenreDto> genreDto = genreStorage.getGenreById(id);
-        if (genreDto.isPresent()){
+        if (genreDto.isPresent()) {
             return genreDto.get();
         } else {
-            throw  new NotFoundException("Жанра с таким id нет");
+            throw new NotFoundException("Жанра с таким id нет");
         }
     }
 }

@@ -20,7 +20,7 @@ public class FilmDto {
     private LocalDate releaseDate;
     @Positive
     private int duration;
-    private Set<GenreDto> genres =  new TreeSet<>((gd1,gd2)->(int)(gd1.getId()-gd2.getId()));
+    private Set<GenreDto> genres = new TreeSet<>((gd1, gd2) -> (int) (gd1.getId() - gd2.getId()));
     private MpaDto mpa;
     private Set<Long> likes = new HashSet<>();
 }

@@ -22,7 +22,7 @@ public class UserService {
         return userStorage.getUsers();
     }
 
-    public  User postUser(User user) {
+    public User postUser(User user) {
         if (user.getName() == null || user.getName().isBlank()) {
             user.setName(user.getLogin());
         }
@@ -43,7 +43,7 @@ public class UserService {
         User user = userStorage.findById(id).orElseThrow(() -> new NotFoundException("Такого id нет"));
         User friendUser = userStorage.findById(friendId).orElseThrow(() -> new NotFoundException("Такого id нет"));
         log.trace("id при добавлении валидны");
-        userStorage.addFriend(id,friendId,friendUser.getFriends().contains(id));
+        userStorage.addFriend(id, friendId, friendUser.getFriends().contains(id));
         log.trace("Друг успешно добавлен");
         return userStorage.findById(id).orElseThrow(() -> new NotFoundException("Такого id нет"));
     }
@@ -52,7 +52,7 @@ public class UserService {
         User user = userStorage.findById(id).orElseThrow(() -> new NotFoundException("Такого id нет"));
         User friendUser = userStorage.findById(friendId).orElseThrow(() -> new NotFoundException("Такого id нет"));
         log.trace("id при удалении валидны");
-        userStorage.deleteFriend(id,friendId);
+        userStorage.deleteFriend(id, friendId);
         //user.getFriends().remove(friendId);
         //friendUser.getFriends().remove(id);
         log.trace("Друг успешно удален");
