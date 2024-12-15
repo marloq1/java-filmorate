@@ -21,7 +21,7 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler({ValidationException.class,MethodArgumentNotValidException.class})
+    @ExceptionHandler({ValidationException.class, MethodArgumentNotValidException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidation(final Exception e) {
         log.error("Вылидация не пройдена");

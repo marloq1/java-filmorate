@@ -23,7 +23,6 @@ public class BaseDbStorage <T> {
     }
 
 
-
     protected Optional<T> findOne(String query, Object... params) {
         try {
             T result = jdbcTemplate.queryForObject(query, mapper, params);
@@ -40,15 +39,15 @@ public class BaseDbStorage <T> {
         }
     }
 
-    protected Long insertWithKey(String query,Object ... params) {
+    protected Long insertWithKey(String query, Object... params) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            for (int idx=0;idx<params.length;idx++){
-                ps.setObject(idx+1,params[idx]);
+            for (int idx = 0; idx < params.length; idx++) {
+                ps.setObject(idx + 1, params[idx]);
             }
             return ps;
-        },keyHolder);
+        }, keyHolder);
         Long id = keyHolder.getKeyAs(Long.class);
         if (id != null) {
             return id;
@@ -56,11 +55,12 @@ public class BaseDbStorage <T> {
             throw new InternalServerException("Не удалось сохранить данные");
         }
     }
+
     protected void insert(String query, Object... params) {
-        int rows =jdbcTemplate.update(con -> {
+        int rows = jdbcTemplate.update(con -> {
             PreparedStatement ps = con.prepareStatement(query);
-            for (int idx=0;idx<params.length;idx++){
-                ps.setObject(idx+1,params[idx]);
+            for (int idx = 0; idx < params.length; idx++) {
+                ps.setObject(idx + 1, params[idx]);
             }
             return ps;
         });

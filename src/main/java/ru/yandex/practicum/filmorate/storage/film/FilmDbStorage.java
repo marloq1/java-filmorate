@@ -4,20 +4,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
-import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.dto.GenreDto;
-import ru.yandex.practicum.filmorate.dto.MpaDto;
 import ru.yandex.practicum.filmorate.exceptions.InternalServerException;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.mapper.FilmMapper;
-import ru.yandex.practicum.filmorate.mapper.UserMapper;
 import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.storage.BaseDbStorage;
-import ru.yandex.practicum.filmorate.storage.GenreStorage;
-import ru.yandex.practicum.filmorate.storage.MpaStorage;
 
 import java.sql.Date;
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,46 +51,50 @@ public class FilmDbStorage extends BaseDbStorage<FilmDao> implements FilmStorage
     @Override
     public Film postFilm(Film film) {
         Long mpaId = null;
-        if (film.getMpa()!=null) {
+        if (film.getMpa() != null) {
             mpaId = film.getMpa().getId();
         }
-        Long id = insertWithKey(INSERT_QUERY,film.getName(),film.getDescription(), Date.valueOf(film.getReleaseDate()),
-                film.getDuration(),mpaId);
+        Long id = insertWithKey(INSERT_QUERY, film.getName(), film.getDescription(), Date.valueOf(film.getReleaseDate()),
+                film.getDuration(), mpaId);
         film.setId(id);
-        for (GenreDto genre: film.getGenres()){
-            insert(INSERT_FILM_GENRE_QUERY,film.getId(),genre.getId());
+        for (GenreDto genre : film.getGenres()) {
+            insert(INSERT_FILM_GENRE_QUERY, film.getId(), genre.getId());
         }
-        return findById(id).orElseThrow(()-> new InternalServerException("Фильм недобавлен"));
+        return findById(id).orElseThrow(() -> new InternalServerException("Фильм недобавлен"));
     }
 
     @Override
     public Film putFilm(Film film) {
+        Long mpaId = null;
+        if (film.getMpa() != null) {
+            mpaId = film.getMpa().getId();
+        }
         update(
                 UPDATE_QUERY,
                 film.getName(),
                 film.getDescription(),
                 Date.valueOf(film.getReleaseDate()),
                 film.getDuration(),
-                film.getMpa().getId(),
+                mpaId,
                 film.getId()
         );
-        return findById(film.getId()).orElseThrow(()->new NotFoundException("Такого id нет"));
+        return findById(film.getId()).orElseThrow(() -> new NotFoundException("Такого id нет"));
     }
 
     @Override
     public Optional<Film> findById(Long filmId) {
-        return FilmMapper.mapToFilmList(findMany(FIND_ID_QUERY,filmId)).stream().filter(film -> film.getId().equals(filmId)).findAny();
+        return FilmMapper.mapToFilmList(findMany(FIND_ID_QUERY, filmId)).stream().filter(film -> film.getId().equals(filmId)).findAny();
     }
 
     @Override
     public Film addLike(Long filmId, Long userId) {
-        insert(INSERT_FILM_LIKES_QUERY,filmId,userId);
-        return findById(filmId).orElseThrow(()->new NotFoundException("Такого id нет"));
+        insert(INSERT_FILM_LIKES_QUERY, filmId, userId);
+        return findById(filmId).orElseThrow(() -> new NotFoundException("Такого id нет"));
     }
 
     @Override
     public Film deleteLike(Long filmId, Long userId) {
-        update(DELETE_FILM_LIKES_QUERY,filmId,userId);
-        return findById(filmId).orElseThrow(()->new NotFoundException("Такого id нет"));
+        update(DELETE_FILM_LIKES_QUERY, filmId, userId);
+        return findById(filmId).orElseThrow(() -> new NotFoundException("Такого id нет"));
     }
 }

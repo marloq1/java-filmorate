@@ -1,14 +1,9 @@
 package ru.yandex.practicum.filmorate.service;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.dto.GenreDto;
 import ru.yandex.practicum.filmorate.dto.MpaDto;
@@ -40,7 +35,7 @@ public class FilmService {
     public FilmDto getFilm(Long id) {
         FilmDto filmDto = new FilmDto();
         Optional<Film> film = filmStorage.findById(id);
-        if (film.isEmpty()){
+        if (film.isEmpty()) {
             throw new NotFoundException("Такого id нет");
         } else {
             filmDto = FilmMapper.mapToFilmDto(film.get());
@@ -53,11 +48,11 @@ public class FilmService {
         return films;
     }
 
-    public FilmDto postFilm(FilmDto filmDto){
+    public FilmDto postFilm(FilmDto filmDto) {
         Film film = FilmMapper.mapToFilm(filmDto);
-        Set <GenreDto> genreDtoSet = new HashSet<>();
+        Set<GenreDto> genreDtoSet = new HashSet<>();
         Optional<MpaDto> mpa;
-        for (GenreDto genreDto:film.getGenres()){
+        for (GenreDto genreDto : film.getGenres()) {
             Optional<GenreDto> genre = genreStorage.getGenreById(genreDto.getId());
             if (genre.isEmpty()) {
                 throw new ValidationException("Фильм с таким жанром невалиден");
@@ -68,7 +63,7 @@ public class FilmService {
         if (!genreDtoSet.isEmpty()) {
             film.setGenres(genreDtoSet);
         }
-        if (film.getMpa()!=null) {
+        if (film.getMpa() != null) {
             mpa = mpaStorage.getMpaById(film.getMpa().getId());
             if (mpa.isEmpty()) {
                 throw new ValidationException("Фильм с таким рейтингом невалиден");
@@ -79,8 +74,9 @@ public class FilmService {
         return FilmMapper.mapToFilmDto(filmStorage.postFilm(film));
     }
 
-    public FilmDto putFilm(@Valid @RequestBody Film film) {
-
+    public FilmDto putFilm(FilmDto filmDto) {
+        Film film = FilmMapper.mapToFilm(filmDto);
+        film.setId(filmDto.getId());
         return FilmMapper.mapToFilmDto(filmStorage.putFilm(film));
 
     }
@@ -91,7 +87,7 @@ public class FilmService {
         filmStorage.findById(id)
                 .orElseThrow(() -> new NotFoundException("Фильма с таким id нет"));
         log.trace("id при добавлении валидны");
-        return FilmMapper.mapToFilmDto(filmStorage.addLike(id,userId));
+        return FilmMapper.mapToFilmDto(filmStorage.addLike(id, userId));
 
 
     }
@@ -102,7 +98,7 @@ public class FilmService {
         Film film = filmStorage.findById(id)
                 .orElseThrow(() -> new NotFoundException("Фильма с таким id нет"));
         log.trace("id при удалении валидны");
-        return FilmMapper.mapToFilmDto(filmStorage.deleteLike(id,userId));
+        return FilmMapper.mapToFilmDto(filmStorage.deleteLike(id, userId));
     }
 
     public List<FilmDto> getTopLikedFilms(int count) {

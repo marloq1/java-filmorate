@@ -1,14 +1,9 @@
 package ru.yandex.practicum.filmorate.dao;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
-import ru.yandex.practicum.filmorate.annotations.MinimumDate;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
+
 
 @Data
 public class FilmDao {

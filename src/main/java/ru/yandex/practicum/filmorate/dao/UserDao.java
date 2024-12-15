@@ -16,7 +16,7 @@ public class UserDao {
     private String login;
     private String name;
     private LocalDate birthday;
-    private Long receiver_id;
+    private Long receiverId;
     private boolean isApproved;
 
 
