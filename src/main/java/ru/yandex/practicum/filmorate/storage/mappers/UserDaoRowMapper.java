@@ -18,7 +18,7 @@ public class UserDaoRowMapper implements RowMapper<UserDao> {
         user.setLogin(resultSet.getString("login"));
         user.setName(resultSet.getString("name"));
         user.setBirthday(resultSet.getDate("birthday").toLocalDate());
-        user.setReceiver_id(resultSet.getLong("receiver_id"));
+        user.setReceiverId(resultSet.getLong("receiver_id"));
         user.setApproved(resultSet.getBoolean("is_approved"));
         return user;
     }

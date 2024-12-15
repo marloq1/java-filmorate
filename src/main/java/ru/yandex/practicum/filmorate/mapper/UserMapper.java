@@ -25,13 +25,13 @@ public class UserMapper {
                 users.put(bufId, mapToUser(usersDao.get(indexUsD)));
 
             }
-            if (usersDao.get(i).getReceiver_id() != 0) {
-                users.get(bufId).getFriends().add(usersDao.get(i).getReceiver_id());
+            if (usersDao.get(i).getReceiverId() != 0) {
+                users.get(bufId).getFriends().add(usersDao.get(i).getReceiverId());
             }
         }
         for (int i = 0; i < usersDao.size(); i++) {
-            if (usersDao.get(i).isApproved() && users.get(usersDao.get(i).getReceiver_id()) != null) {
-                users.get(usersDao.get(i).getReceiver_id()).getFriends().add(usersDao.get(i).getId());
+            if (usersDao.get(i).isApproved() && users.get(usersDao.get(i).getReceiverId()) != null) {
+                users.get(usersDao.get(i).getReceiverId()).getFriends().add(usersDao.get(i).getId());
             }
         }
 

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class BaseDbStorage <T> {
+public class BaseDbStorage<T> {
 
     private final JdbcTemplate jdbcTemplate;
     private final RowMapper<T> mapper;
