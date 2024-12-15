@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository("UserDb")
-public class UserDbStorage extends BaseDbStorage<UserDao> implements UserStorage{
+public class UserDbStorage extends BaseDbStorage<UserDao> implements UserStorage {
 
     private static final String FIND_ALL_QUERY = "SELECT * FROM users AS u LEFT JOIN friends AS f ON u.id=f.sender_id";
     private static final String FIND_ID_QUERY = "SELECT * FROM users AS u LEFT JOIN friends AS f ON u.id=f.sender_id " +
@@ -44,7 +44,7 @@ public class UserDbStorage extends BaseDbStorage<UserDao> implements UserStorage
 
     @Override
     public User postUser(User user) {
-        Long id = insertWithKey(INSERT_QUERY,user.getEmail(),user.getLogin(),user.getName(), Date.valueOf(user.getBirthday()));
+        Long id = insertWithKey(INSERT_QUERY, user.getEmail(), user.getLogin(), user.getName(), Date.valueOf(user.getBirthday()));
         user.setId(id);
         return user;
     }
@@ -64,31 +64,31 @@ public class UserDbStorage extends BaseDbStorage<UserDao> implements UserStorage
 
     @Override
     public Optional<User> findById(Long userId) {
-       return UserMapper.mapToUserList(findMany(FIND_ID_QUERY,userId,userId)).stream().filter(user -> user.getId().equals(userId)).findAny();
+        return UserMapper.mapToUserList(findMany(FIND_ID_QUERY, userId, userId)).stream().filter(user -> user.getId().equals(userId)).findAny();
     }
 
     @Override
-    public void addFriend(Long user_id, Long friendId,boolean status) {
+    public void addFriend(Long userId, Long friendId, boolean status) {
         if (!status) {
-            insert(INSERT_QUERY_FRIENDS, user_id, friendId, status);
+            insert(INSERT_QUERY_FRIENDS, userId, friendId, status);
         } else {
-            update(UPDATE_QUERY_FRIENDS,status,friendId,user_id);
+            update(UPDATE_QUERY_FRIENDS, status, friendId, userId);
         }
     }
 
     @Override
     public void deleteFriend(Long userId, Long friendId) {
-        if (findOne(FIND_FRIENDS_QUERY,userId,userId,friendId,friendId).isPresent()) {
-            UserDao userDao = findOne(FIND_FRIENDS_QUERY,userId,userId,friendId,friendId).get();
+        if (findOne(FIND_FRIENDS_QUERY, userId, userId, friendId, friendId).isPresent()) {
+            UserDao userDao = findOne(FIND_FRIENDS_QUERY, userId, userId, friendId, friendId).get();
             if (!userDao.isApproved()) {
                 if (findOne(FIND_FRIENDS_QUERY, userId, 0, 0, friendId).isPresent()) {
                     update(DELETE_QUERY_FRIENDS, userId, friendId);
                 }
             } else {
                 if (findOne(FIND_FRIENDS_QUERY, userId, 0, 0, friendId).isPresent()) {
-                    update(UPDATE_SWAP_FRIENDS, friendId,userId,  false, userId,friendId );
+                    update(UPDATE_SWAP_FRIENDS, friendId, userId, false, userId, friendId);
                 } else {
-                    update(UPDATE_QUERY_FRIENDS, false, friendId,userId);
+                    update(UPDATE_QUERY_FRIENDS, false, friendId, userId);
                 }
             }
         }
