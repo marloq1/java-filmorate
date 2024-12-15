@@ -2,8 +2,10 @@ package ru.yandex.practicum.filmorate.storage.film;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.dao.FilmDao;
+import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
-import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.model.film.Film;
 
 import java.util.*;
 
@@ -14,8 +16,8 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
 
     @Override
-    public Collection<Film> getFilms() {
-        return films.values();
+    public List<Film> getFilms() {
+        return films.values().stream().toList();
     }
 
     @Override
@@ -53,5 +55,17 @@ public class InMemoryFilmStorage implements FilmStorage {
                 .max()
                 .orElse(0);
         return ++currentMaxId;
+    }
+
+    @Override
+    public Film addLike(Long filmId, Long userId) {
+        films.get(filmId).getLikes().add(userId);
+        return films.get(filmId);
+    }
+
+    @Override
+    public Film deleteLike(Long filmId,Long userId){
+        films.get(filmId).getLikes().remove(userId);
+        return films.get(filmId);
     }
 }

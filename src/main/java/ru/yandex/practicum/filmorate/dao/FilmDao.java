@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.dao;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -11,16 +11,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-public class Film {
-
+public class FilmDao {
     private Long id;
-    @NotBlank
     private String name;
-    @Size(max = 200)
     private String description;
-    @MinimumDate(value = "1895-12-28")
     private LocalDate releaseDate;
-    @Positive
     private int duration;
-    private Set<Long> likes = new HashSet<>();
+    private Long mpaId;
+    private Long genreId;
+    private Long userId;
+    private String genre;
+    private String mpa;
 }

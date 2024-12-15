@@ -3,10 +3,11 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
@@ -20,20 +21,21 @@ import java.util.List;
 public class UserController {
 
 
+    @Qualifier("UserDb")
     private final UserStorage userStorage;
     private final UserService userService;
 
     @GetMapping
     public Collection<User> getUsers() {
         log.info("Запрос коллекции пользователей");
-        return userStorage.getUsers();
+        return userService.getUsers();
     }
 
 
     @PostMapping
     public User postUser(@Valid @RequestBody User user) {
         log.info("Добавление нового пользователя");
-        return userStorage.postUser(user);
+        return userService.postUser(user);
     }
 
     @PutMapping
@@ -43,7 +45,7 @@ public class UserController {
             log.error("Не указан id");
             throw new ValidationException("Не указан id");
         }
-        return userStorage.putUser(user);
+        return userService.putUser(user);
 
     }
 
