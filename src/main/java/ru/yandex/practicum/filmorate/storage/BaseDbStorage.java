@@ -2,12 +2,14 @@ package ru.yandex.practicum.filmorate.storage;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import ru.yandex.practicum.filmorate.exceptions.InternalServerException;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
@@ -37,6 +39,23 @@ public class BaseDbStorage<T> {
         if (rowsUpdated == 0) {
             throw new InternalServerException("Не удалось обновить данные");
         }
+    }
+
+    protected void insertMany(String query, List<Long> listIds, Long id) {
+        jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement preparedStatement, int i) throws SQLException {
+
+                preparedStatement.setObject(1, id);
+                preparedStatement.setObject(2, listIds.get(i));
+
+            }
+
+            @Override
+            public int getBatchSize() {
+                return listIds.size();
+            }
+        });
     }
 
     protected Long insertWithKey(String query, Object... params) {

@@ -3,13 +3,10 @@ package ru.yandex.practicum.filmorate.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exceptions.NotFoundException;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
-import ru.yandex.practicum.filmorate.model.user.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,60 +18,58 @@ import java.util.List;
 public class UserController {
 
 
-    @Qualifier("UserDb")
-    private final UserStorage userStorage;
     private final UserService userService;
 
     @GetMapping
-    public Collection<User> getUsers() {
+    public Collection<UserDto> getUsers() {
         log.info("Запрос коллекции пользователей");
         return userService.getUsers();
     }
 
 
     @PostMapping
-    public User postUser(@Valid @RequestBody User user) {
+    public UserDto postUser(@Valid @RequestBody UserDto userDto) {
         log.info("Добавление нового пользователя");
-        return userService.postUser(user);
+        return userService.postUser(userDto);
     }
 
     @PutMapping
-    public User putUser(@Valid @RequestBody User user) {
+    public UserDto putUser(@Valid @RequestBody UserDto userDto) {
         log.info("Замена пользователя");
-        if (user.getId() == null) {
+        if (userDto.getId() == null) {
             log.error("Не указан id");
             throw new ValidationException("Не указан id");
         }
-        return userService.putUser(user);
+        return userService.putUser(userDto);
 
     }
 
     @GetMapping("/{id}")
-    public User getUser(@PathVariable long id) {
+    public UserDto getUser(@PathVariable long id) {
         log.info("Запрос пользователя по id");
-        return userStorage.findById(id).orElseThrow(() -> new NotFoundException("Такого id нет"));
+        return userService.getUser(id);
     }
 
     @GetMapping("/{id}/friends")
-    public List<User> getUserFriends(@PathVariable long id) {
+    public List<UserDto> getUserFriends(@PathVariable long id) {
         log.info("Запрос друзей пользователя");
         return userService.getUserFriends(id);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
-    public User addFriend(@PathVariable long id, @PathVariable long friendId) {
+    public UserDto addFriend(@PathVariable long id, @PathVariable long friendId) {
         log.info("Добавление друга");
         return userService.addFriend(id, friendId);
     }
 
     @DeleteMapping("/{id}/friends/{friendId}")
-    public User deleteFriend(@PathVariable long id, @PathVariable long friendId) {
+    public UserDto deleteFriend(@PathVariable long id, @PathVariable long friendId) {
         log.info("Удаление друга");
         return userService.deleteFriend(id, friendId);
     }
 
     @GetMapping("/{id}/friends/common/{otherId}")
-    public List<User> getMutualFriendsList(@PathVariable long id, @PathVariable long otherId) {
+    public List<UserDto> getMutualFriendsList(@PathVariable long id, @PathVariable long otherId) {
         log.info("Вывод общего списка друзей");
         return userService.getMutualFriendsList(id, otherId);
     }
