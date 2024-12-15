@@ -1,11 +1,39 @@
 package ru.yandex.practicum.filmorate.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.dao.UserDao;
+import ru.yandex.practicum.filmorate.dto.UserDto;
 import ru.yandex.practicum.filmorate.model.user.User;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+@UtilityClass
 public class UserMapper {
+
+    public static User mapToUser(UserDto userDto) {
+        User user = new User();
+        user.setEmail(userDto.getEmail());
+        user.setLogin(userDto.getLogin());
+        user.setName(userDto.getName());
+        user.setBirthday(userDto.getBirthday());
+        return user;
+    }
+
+    public static UserDto mapToUserDto(User user) {
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setEmail(user.getEmail());
+        userDto.setLogin(user.getLogin());
+        userDto.setName(user.getName());
+        userDto.setBirthday(user.getBirthday());
+        for (Long friendId : user.getFriends()) {
+            userDto.getFriends().add(friendId);
+        }
+        return userDto;
+    }
 
     public static List<User> mapToUserList(List<UserDao> usersDao) {
         Map<Long, User> users = new HashMap<>();
@@ -15,14 +43,14 @@ public class UserMapper {
         Long bufId = usersDao.getFirst().getId();
         int indexUsD;
 
-        User user = mapToUser(usersDao.getFirst());
+        User user = mapDaoToUser(usersDao.getFirst());
         users.put(bufId, user);
 
         for (int i = 0; i < usersDao.size(); i++) {
             if (!(bufId.equals(usersDao.get(i).getId()))) {
                 indexUsD = i;
                 bufId = usersDao.get(indexUsD).getId();
-                users.put(bufId, mapToUser(usersDao.get(indexUsD)));
+                users.put(bufId, mapDaoToUser(usersDao.get(indexUsD)));
 
             }
             if (usersDao.get(i).getReceiverId() != 0) {
@@ -39,7 +67,7 @@ public class UserMapper {
         return users.values().stream().toList();
     }
 
-    private static User mapToUser(UserDao userDao) {
+    private static User mapDaoToUser(UserDao userDao) {
         User user = new User();
         user.setName(userDao.getName());
         user.setEmail(userDao.getEmail());

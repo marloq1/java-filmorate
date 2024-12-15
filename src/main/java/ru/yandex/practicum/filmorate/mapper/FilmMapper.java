@@ -1,5 +1,6 @@
 package ru.yandex.practicum.filmorate.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.dao.FilmDao;
 import ru.yandex.practicum.filmorate.dto.FilmDto;
 import ru.yandex.practicum.filmorate.dto.GenreDto;
@@ -8,6 +9,7 @@ import ru.yandex.practicum.filmorate.model.film.Film;
 
 import java.util.*;
 
+@UtilityClass
 public class FilmMapper {
 
     public static Film mapToFilm(FilmDto filmDto) {

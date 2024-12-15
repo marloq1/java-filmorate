@@ -12,6 +12,7 @@ import ru.yandex.practicum.filmorate.model.film.Film;
 import ru.yandex.practicum.filmorate.storage.BaseDbStorage;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,9 +58,11 @@ public class FilmDbStorage extends BaseDbStorage<FilmDao> implements FilmStorage
         Long id = insertWithKey(INSERT_QUERY, film.getName(), film.getDescription(), Date.valueOf(film.getReleaseDate()),
                 film.getDuration(), mpaId);
         film.setId(id);
+        List<Long> genreIds = new ArrayList<>();
         for (GenreDto genre : film.getGenres()) {
-            insert(INSERT_FILM_GENRE_QUERY, film.getId(), genre.getId());
+            genreIds.add(genre.getId());
         }
+        insertMany(INSERT_FILM_GENRE_QUERY, genreIds, film.getId());
         return findById(id).orElseThrow(() -> new InternalServerException("Фильм недобавлен"));
     }
 
