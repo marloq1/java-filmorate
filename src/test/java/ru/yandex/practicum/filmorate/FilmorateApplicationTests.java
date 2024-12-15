@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 @Import({UserDbStorage.class, FilmDbStorage.class,UserDaoRowMapper.class, FilmDaoRowMapper.class})
-class FilmoRateApplicationTests {
+class FilmorateApplicationTests {
 
 	private User user1 = new User();
 	private User user2 = new User();
@@ -170,7 +170,7 @@ class FilmoRateApplicationTests {
 	}
 
 	@Test
-	public void TestPutUser() {
+	public void testPutUser() {
 		user2.setId(2L);
 		user2.setEmail("3@mail.ru");
 		user2.setName("name3");
@@ -203,7 +203,7 @@ class FilmoRateApplicationTests {
 	}
 
 	@Test
-	public void TestPutFilm() {
+	public void testPutFilm() {
 		film2.setName("film3");
 		film2.setDescription("desc3");
 		film2.setReleaseDate(LocalDate.of(1998, Month.APRIL, 16));
@@ -216,7 +216,7 @@ class FilmoRateApplicationTests {
 	}
 
 	@Test
-	public void TestAddAndDeleteLike() {
+	public void testAddAndDeleteLike() {
 		filmStorage.addLike(1L,2L);
 		Film filmFromDb = filmStorage.findById(1L).orElseThrow();
 		Long id = 3L;
